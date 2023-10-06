@@ -1,4 +1,4 @@
-const nanoID = require('nanoid')
+const { nanoid } = require("nanoid")
 
 class Ticket {
   /**
@@ -7,7 +7,7 @@ class Ticket {
    * @param {number} price
    */
   constructor(username, price) {
-    this.id = nanoID.random
+    this.id = nanoid()
     this.username = username
     this.price = price
     this.createdAt = new Date()

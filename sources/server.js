@@ -5,6 +5,8 @@ const cors = require('cors')
 const app = express()
 app.use([morgan('dev'), cors(), express.json()])
 
+app.use('/api/raffledraw', require('./routes'))
+
 app.get('/', (req, res) => {
   res.status(200).json({
     message: 'success! from home'

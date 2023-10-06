@@ -1,3 +1,4 @@
+const { response } = require('express')
 const Ticket = require('./Ticket')
 const { readFile, writeFile } = require('./utilities')
 
@@ -9,15 +10,74 @@ class TicketCollection {
   }
 
   /**
+   * return all tickets
+   */
+  tickets() {
+    return this[tickets]
+  }
+
+  /**
    * create and save new ticket
    * @param {string} username
    * @param {number} price
    * @return {Ticket}
    */
-  create(username, price) {
+  createTicket(username, price) {
     const ticket = new Ticket(username, price)
     this[tickets].push(ticket)
     return tickets
+  }
+
+  /**
+   * find a ticket by id
+   * @param {string} id
+   * @return {Ticket}
+   */
+  readTicket(id) {
+    const ticket = this[tickets].find(
+      /**
+       * @param {Ticket} ticket
+       */
+      (ticket) => ticket.id === id
+    )
+    return ticket
+  }
+
+  /**
+   * update ticket by ticket ID
+   * @param {string} ticketID
+   * @param {{username: string, price: number}} ticketBody
+   * return {Ticket}
+   */
+  updateTicket(ticketID, ticketBody) {
+    const ticket = this.findByID(ticketID)
+    if(ticket) {
+      ticket.username = ticketBody.username ?? ticket.username
+      ticket.price = ticketBody.price ?? ticket.price
+    }
+    return ticket
+  }
+
+  /**
+   * delete ticket
+   * @param {string} ticketID
+   * return {boolean}
+   */
+  deleteTicket(ticketID) {
+    const index = this[tickets].findIndex(
+      /**
+       *
+       * @param {Ticket} ticket
+       * @returns {object}
+       */
+      (ticket) => ticket.id === ticketID
+    )
+    if(index === -1) {
+      return false
+    } else {
+      this[tickets].splice(index, 1)
+      return true
+    }
   }
 
   /**
@@ -34,6 +94,21 @@ class TicketCollection {
       result.push(ticket)
     }
     return result
+  }
+
+  /**
+   * find a tickets of username
+   * @param {string} username
+   * @return {Ticket[]}
+   */
+  readdBulk(username) {
+    const ticket = this[tickets].filter(
+      /**
+       * @param {Ticket} tickets
+       */
+      (ticket) => ticket.username === username
+    )
+    return tickets
   }
 
   /**
@@ -69,78 +144,6 @@ class TicketCollection {
     return deletedResult
   }
 
-  /**
-   * return all tickets
-   */
-  find() {
-    return this[tickets]
-  }
-
-  /**
-   * find a ticket by id
-   * @param {string} id
-   * @return {Ticket}
-   */
-  findByID(id) {
-    const ticket = this[tickets].find(
-      /**
-       * @param {Ticket} ticket
-       */
-      (ticket) => ticket.id === id
-    )
-    return ticket
-  }
-
-  /**
-   * find a tickets of username
-   * @param {string} username
-   * @return {Ticket[]}
-   */
-  findByUsername(username) {
-    const ticket = this[tickets].filter(
-      /**
-       * @param {Ticket} tickets
-       */
-      (ticket) => ticket.username === username
-    )
-    return tickets
-  }
-
-  /**
-   * update ticket by ticket ID
-   * @param {string} ticketID
-   * @param {{username: string, price: number}} ticketBody
-   * return {Ticket}
-   */
-  updateByID(ticketID, ticketBody) {
-    const ticket = this.findByID(ticketID)
-    ticket.username = ticketBody.username ?? ticket.username
-    ticket.price = ticketBody.price ?? ticket.price
-    return ticket
-  }
-
-  /**
-   * delete ticket
-   * @param {string} ticketID
-   * return {boolean}
-   */
-  deleteTicket(ticketID) {
-    const index = this[tickets].findIndex(
-      /**
-       *
-       * @param {Ticket} ticket
-       * @returns {object}
-       */
-      (ticket) => ticket.id === ticketID
-    )
-    if(index === -1) {
-      return false
-    } else {
-      this[tickets].splice(index, 1)
-      return true
-    }
-  }
-
   draw(winnerCount) {
     const winnerIndexes = new Array(winnerCount)
     let winnerIndex = 0
@@ -161,5 +164,5 @@ class TicketCollection {
   }
 }
 
-const ticketsCollection = new TicketCollection()
-module.exports = ticketsCollection
+const ticketCollection = new TicketCollection()
+module.exports = ticketCollection
