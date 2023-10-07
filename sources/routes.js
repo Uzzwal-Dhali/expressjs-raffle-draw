@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const {
-  tickects,
+  tickets,
   createTicket,
   readTicket,
   updateTicket,
@@ -24,7 +24,7 @@ router.route('/bulk/:username')
 
 router.post('/createBulk', createBulk)
 router.route('/')
-  .get(tickects)
+  .get(tickets)
   .post(createTicket)
 
 router.get('/raffleDraw', raffleDraw)

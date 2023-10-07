@@ -21,11 +21,13 @@ app.get('/health', (_req, res) => {
 
 app.use((_req, _res, next) => {
   const error = new Error('Resource not found!')
+  console.log(error)
   error.status = 404
   next(error)
 })
 
 app.use((error, _req, res, _next) => {
+  console.log(error)
   if(error.status) {
     return res.status(error.status).json({
       message: error.message
