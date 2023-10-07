@@ -86,7 +86,8 @@ exports.deleteBulk = (req, res) => {
 
 // ALL TICKETS
 exports.tickets = (req, res) => {
-  const tickets = ticketCollection.tickets
+  const tickets = ticketCollection.tickets()
+  console.log("Oops:" . tickets)
   res.status(200).json({
     items: tickets,
     total: tickets.length

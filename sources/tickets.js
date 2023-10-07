@@ -15,8 +15,8 @@ class TicketCollection {
    * return all tickets
    */
   tickets() {
-    return this[tickets]
-    writeFile(this[tickets])
+    const allTickets = this[tickets]
+    return allTickets
   }
 
   /**
